@@ -368,7 +368,6 @@ body:hover .spotlight{opacity:1}
     <p>Building next-generation Discord tools and platforms that empower developers and communities worldwide. From anti-cheat to AI coding assistants — we craft the future of Discord.</p>
     <div class="hero-stats">
       <div class="hero-stat"><div class="hero-stat-value" id="statUsers">0</div><div class="hero-stat-label">Users</div></div>
-      <div class="hero-stat"><div class="hero-stat-value" id="statServers">0</div><div class="hero-stat-label">Servers</div></div>
       <div class="hero-stat"><div class="hero-stat-value" id="statRating">0.0</div><div class="hero-stat-label">Rating</div></div>
     </div>
     <div class="hero-cta">
@@ -1227,7 +1226,6 @@ function updateStats() {
   const users = JSON.parse(localStorage.getItem(LS_USERS) || '[]');
   const ratings = JSON.parse(localStorage.getItem(LS_RATINGS) || '[]');
   document.getElementById('statUsers').textContent = users.length;
-  document.getElementById('statServers').textContent = '12K+';
   const avg = ratings.length > 0 ? (ratings.reduce((s,r) => s + r.rating, 0) / ratings.length).toFixed(1) : '0.0';
   document.getElementById('statRating').textContent = avg;
 }
@@ -1259,12 +1257,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initDemoData();
   initGate();
   handleOAuthCallback(); // Check for ?code=... from Discord redirect
-
-  // Render all sections live on every page load - rules, announcements, ratings, stats
-  renderRules();
-  renderAnnouncements();
-  renderRating();
-  updateStats();
 
   document.querySelectorAll('.product-card, .about-card, .link-card, .feature-item').forEach(el => {
     observer.observe(el);
