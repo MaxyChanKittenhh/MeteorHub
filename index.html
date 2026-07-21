@@ -368,7 +368,6 @@ body:hover .spotlight{opacity:1}
     <p>Building next-generation Discord tools and platforms that empower developers and communities worldwide. From anti-cheat to AI coding assistants — we craft the future of Discord.</p>
     <div class="hero-stats">
       <div class="hero-stat"><div class="hero-stat-value" id="statUsers">0</div><div class="hero-stat-label">Users</div></div>
-      <div class="hero-stat"><div class="hero-stat-value" id="statServers">0</div><div class="hero-stat-label">Servers</div></div>
       <div class="hero-stat"><div class="hero-stat-value" id="statRating">0.0</div><div class="hero-stat-label">Rating</div></div>
     </div>
     <div class="hero-cta">
@@ -1149,22 +1148,43 @@ function renderOwnerPanel() {
     `;
   } else if (ownerTab === 'ratings') {
     const ratings = JSON.parse(localStorage.getItem(LS_RATINGS) || '[]');
+    const avg = ratings.length > 0 ? (ratings.reduce((s,r) => s + r.rating, 0) / ratings.length).toFixed(1) : '0.0';
+    const counts = {1:0,2:0,3:0,4:0,5:0};
+    ratings.forEach(r => counts[r.rating] = (counts[r.rating] || 0) + 1);
+
     content.innerHTML = `
-      <h3 style="font-size:1.1rem;font-weight:600;margin-bottom:16px;">⭐ All Ratings (${ratings.length})</h3>
-      <div style="overflow-x:auto;">
-        <table class="user-table">
-          <thead><tr><th>User</th><th>Rating</th><th>Comment</th><th>Date</th></tr></thead>
-          <tbody>${ratings.sort((a,b) => new Date(b.date) - new Date(a.date)).map(r => `
-            <tr>
-              <td><img class="user-avatar-small" src="${r.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png'}" alt="">${escapeHtml(r.username)}</td>
-              <td>${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</td>
-              <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(r.comment || '-')}</td>
-              <td>${formatDate(r.date)}</td>
-            </tr>
-          `).join('')}</tbody>
-        </table>
+      <div class="stats-grid" style="margin-bottom:24px;">
+        <div class="stat-box"><div class="value">${ratings.length}</div><div class="label">Total Ratings</div></div>
+        <div class="stat-box"><div class="value">${avg}</div><div class="label">Average</div></div>
+        <div class="stat-box"><div class="value">${counts[5]}</div><div class="label">5★ Reviews</div></div>
+        <div class="stat-box"><div class="value">${counts[1]}</div><div class="label">1★ Reviews</div></div>
       </div>
-      ${ratings.length === 0 ? '<p style="color:var(--text-muted);text-align:center;padding:20px;">No ratings yet.</p>' : ''}
+
+      <h3 style="font-size:1.1rem;font-weight:600;margin-bottom:16px;">⭐ Rating Distribution</h3>
+      <div style="max-width:400px;margin-bottom:32px;">
+        ${[5,4,3,2,1].map(s => {
+          const count = counts[s] || 0;
+          const pct = ratings.length > 0 ? (count / ratings.length * 100) : 0;
+          return `<div class="rating-bar-row"><span class="rating-bar-label">${s}★</span><div class="rating-bar-track"><div class="rating-bar-fill" style="width:${pct}%"></div></div><span class="rating-bar-count">${count}</span></div>`;
+        }).join('')}
+      </div>
+
+      <h3 style="font-size:1.1rem;font-weight:600;margin-bottom:16px;">📝 All Reviews (${ratings.length})</h3>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        ${ratings.length === 0 ? '<p style="color:var(--text-muted);text-align:center;padding:20px;">No ratings yet.</p>' : ratings.sort((a,b) => new Date(b.date) - new Date(a.date)).map(r => `
+          <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:16px 20px;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+              <img src="${r.avatar || 'https://cdn.discordapp.com/embed/avatars/0.png'}" style="width:32px;height:32px;border-radius:50%;border:1px solid var(--border);" alt="">
+              <div>
+                <div style="font-weight:600;font-size:0.9rem;">${escapeHtml(r.username)}</div>
+                <div style="font-size:0.75rem;color:var(--text-muted);">${formatDate(r.date)}</div>
+              </div>
+              <div style="margin-left:auto;font-size:1.2rem;color:var(--warning);">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div>
+            </div>
+            ${r.comment ? `<div style="color:var(--text-secondary);font-size:0.85rem;line-height:1.6;padding-left:44px;">"${escapeHtml(r.comment)}"</div>` : '<div style="color:var(--text-muted);font-size:0.8rem;padding-left:44px;font-style:italic;">No comment provided</div>'}
+          </div>
+        `).join('')}
+      </div>
     `;
   }
 }
@@ -1259,12 +1279,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initDemoData();
   initGate();
   handleOAuthCallback(); // Check for ?code=... from Discord redirect
-
-  // Always update stats and rating on page load so they show live data
-  updateStats();
-  renderRating();
-  renderAnnouncements();
-  renderRules();
 
   document.querySelectorAll('.product-card, .about-card, .link-card, .feature-item').forEach(el => {
     observer.observe(el);
