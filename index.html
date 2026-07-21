@@ -368,7 +368,6 @@ body:hover .spotlight{opacity:1}
     <p>Building next-generation Discord tools and platforms that empower developers and communities worldwide. From anti-cheat to AI coding assistants — we craft the future of Discord.</p>
     <div class="hero-stats">
       <div class="hero-stat"><div class="hero-stat-value" id="statUsers">0</div><div class="hero-stat-label">Users</div></div>
-      <div class="hero-stat"><div class="hero-stat-value" id="statServers">0</div><div class="hero-stat-label">Servers</div></div>
       <div class="hero-stat"><div class="hero-stat-value" id="statRating">0.0</div><div class="hero-stat-label">Rating</div></div>
     </div>
     <div class="hero-cta">
@@ -512,16 +511,16 @@ body:hover .spotlight{opacity:1}
       <p class="section-subtitle">Find all our resources and platforms in one place.</p>
     </div>
     <div class="links-grid">
-      <a href="https://invites.gg/meteorofficial" class="link-card" target="_blank" id="support">
+      <a href="YOUR_DISCORD_INVITE_LINK_HERE" class="link-card" target="_blank" id="support">
         <div class="link-arrow">→</div><div class="link-icon">💬</div><div class="link-title">Discord Server</div><div class="link-desc">Join for support & updates</div>
       </a>
-      <a href="https://meteor-tos-mu.vercel.app/" class="link-card" target="_blank">
+      <a href="YOUR_TOS_URL_HERE" class="link-card" target="_blank">
         <div class="link-arrow">→</div><div class="link-icon">📄</div><div class="link-title">Terms of Service</div><div class="link-desc">Legal guidelines</div>
       </a>
-      <a href="https://meteor-privacy-policyy.vercel.app/" class="link-card" target="_blank">
+      <a href="YOUR_PRIVACY_URL_HERE" class="link-card" target="_blank">
         <div class="link-arrow">→</div><div class="link-icon">🔒</div><div class="link-title">Privacy Policy</div><div class="link-desc">Data protection info</div>
       </a>
-      <a href="https://www.youtube.com/@rbxmeteor" class="link-card" target="_blank">
+      <a href="YOUR_YOUTUBE_CHANNEL_HERE" class="link-card" target="_blank">
         <div class="link-arrow">→</div><div class="link-icon">▶️</div><div class="link-title">YouTube Channel</div><div class="link-desc">Tutorials & showcases</div>
       </a>
       <a href="YOUR_ROBLOX_HUB_HERE" class="link-card" target="_blank">
@@ -582,7 +581,7 @@ body:hover .spotlight{opacity:1}
 const DISCORD_CLIENT_ID = '1529104213575991346';
 const DISCORD_REDIRECT_URI = 'https://meteor-hub.vercel.app/';
 const DISCORD_SCOPE = 'identify';
-const OWNER_DISCORD_IDS = ['1435659333424779364']; // <-- ADD YOUR DISCORD USER ID(S) HERE
+const OWNER_DISCORD_IDS = ['123456789012345678']; // <-- ADD YOUR DISCORD USER ID(S) HERE
 
 // ==================== STATE ====================
 let currentUser = null;
@@ -1027,7 +1026,7 @@ function openOwnerPanel() {
   document.getElementById('ownerPanelOverlay').classList.add('active');
   document.body.style.overflow = 'hidden';
   ownerTab = 'analytics';
-  // Reset tab buttons
+  // Reset all tabs
   document.querySelectorAll('.owner-tab').forEach(t => t.classList.remove('active'));
   const firstTab = document.querySelector('.owner-tab');
   if (firstTab) firstTab.classList.add('active');
@@ -1236,7 +1235,7 @@ function updateStats() {
   const users = JSON.parse(localStorage.getItem(LS_USERS) || '[]');
   const ratings = JSON.parse(localStorage.getItem(LS_RATINGS) || '[]');
   document.getElementById('statUsers').textContent = users.length;
-  document.getElementById('statServers').textContent = users.length;
+  document.getElementById('statServers').textContent = '12K+';
   const avg = ratings.length > 0 ? (ratings.reduce((s,r) => s + r.rating, 0) / ratings.length).toFixed(1) : '0.0';
   document.getElementById('statRating').textContent = avg;
 }
