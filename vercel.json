@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "api/auth/discord.js",
+      "src": "api/auth/discord.mjs",
       "use": "@vercel/node"
     },
     {
@@ -11,8 +11,8 @@
     }
   ],
   "routes": [
-    { "src": "/api/auth/discord", "dest": "api/auth/discord.js" },
-    { "src": "/api/(.*)", "dest": "api/auth/discord.js" },
+    { "src": "/api/auth/discord", "dest": "api/auth/discord.mjs" },
+    { "src": "/api/(.*)", "dest": "api/auth/discord.mjs" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
