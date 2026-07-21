@@ -1,18 +1,18 @@
 {
   "version": 2,
-  "framework": null,
-  "buildCommand": null,
-  "installCommand": "npm install",
-  "outputDirectory": ".",
-  "routes": [
-    { "src": "/api/auth/discord", "dest": "/api/auth/discord.js" },
-    { "src": "/api/(.*)", "dest": "/api/auth/discord.js" },
-    { "src": "/(.*)", "dest": "/index.html" }
-  ],
-  "functions": {
-    "api/auth/discord.js": {
-      "runtime": "nodejs18.x",
-      "maxDuration": 10
+  "builds": [
+    {
+      "src": "api/auth/discord.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
     }
-  }
+  ],
+  "routes": [
+    { "src": "/api/auth/discord", "dest": "api/auth/discord.js" },
+    { "src": "/api/(.*)", "dest": "api/auth/discord.js" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ]
 }
