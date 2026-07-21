@@ -368,6 +368,7 @@ body:hover .spotlight{opacity:1}
     <p>Building next-generation Discord tools and platforms that empower developers and communities worldwide. From anti-cheat to AI coding assistants — we craft the future of Discord.</p>
     <div class="hero-stats">
       <div class="hero-stat"><div class="hero-stat-value" id="statUsers">0</div><div class="hero-stat-label">Users</div></div>
+      <div class="hero-stat"><div class="hero-stat-value" id="statServers">0</div><div class="hero-stat-label">Servers</div></div>
       <div class="hero-stat"><div class="hero-stat-value" id="statRating">0.0</div><div class="hero-stat-label">Rating</div></div>
     </div>
     <div class="hero-cta">
@@ -1019,17 +1020,9 @@ function submitRating() {
 
 // ==================== OWNER PANEL ====================
 function openOwnerPanel() {
-  if (!currentUser || !OWNER_DISCORD_IDS.includes(currentUser.id)) {
-    alert('Access Denied: You are not an owner.');
-    return;
-  }
+  if (!currentUser || !OWNER_DISCORD_IDS.includes(currentUser.id)) return;
   document.getElementById('ownerPanelOverlay').classList.add('active');
   document.body.style.overflow = 'hidden';
-  ownerTab = 'analytics';
-  // Reset all tabs
-  document.querySelectorAll('.owner-tab').forEach(t => t.classList.remove('active'));
-  const firstTab = document.querySelector('.owner-tab');
-  if (firstTab) firstTab.classList.add('active');
   renderOwnerPanel();
 }
 
@@ -1051,7 +1044,6 @@ function switchOwnerTab(tab) {
 
 function renderOwnerPanel() {
   const content = document.getElementById('ownerPanelContent');
-  if (!content) return;
   if (!currentUser || !OWNER_DISCORD_IDS.includes(currentUser.id)) {
     content.innerHTML = `<div class="access-denied"><div class="icon">🚫</div><h3>Access Denied</h3><p>You do not have permission to access the Owner Panel.</p></div>`;
     return;
@@ -1267,6 +1259,12 @@ document.addEventListener('DOMContentLoaded', () => {
   initDemoData();
   initGate();
   handleOAuthCallback(); // Check for ?code=... from Discord redirect
+
+  // Always update stats and rating on page load so they show live data
+  updateStats();
+  renderRating();
+  renderAnnouncements();
+  renderRules();
 
   document.querySelectorAll('.product-card, .about-card, .link-card, .feature-item').forEach(el => {
     observer.observe(el);
